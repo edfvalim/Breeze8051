@@ -88,7 +88,7 @@ unsigned char esc_byte_dado(unsigned char dado);
 int esc_eeprom(unsigned char end_disp,unsigned char end, unsigned char dado);
 int le_eeprom(unsigned char end_disp, unsigned char end);
 float le_temp(float temp);
-
+volatile unsigned __bit flag = 0;
 /*********************************************************************
  * 
  * 	DS18B20
@@ -340,32 +340,48 @@ void putchar ( char c)
 {
 	__bit lado;
 	static unsigned char cont_car=0;
-
-	if (c<9)
-	{
-		conf_pag(c-1,ESQ);
-		conf_pag(c-1,DIR);
-		conf_Y(0,ESQ);
-		conf_Y(0,DIR);
-		cont_car=0;
+	if(flag == 1){
+		//SBUF0 = c;
+		//while(TI0 ==0);
+		//TI0 = 0;
 	}
-	else
-	{
-		if (cont_car<8) lado =ESQ;
-			else lado =DIR;
-		c = c-32;
-		esc_glcd(fonte[c][0], DA, lado);
-		esc_glcd(fonte[c][1], DA, lado);
-		esc_glcd(fonte[c][2], DA, lado);
-		esc_glcd(fonte[c][3], DA, lado);
-		esc_glcd(fonte[c][4], DA, lado);
-		esc_glcd(0x00, DA, lado);
-		esc_glcd(0x00, DA, lado);
-		esc_glcd(0x00, DA, lado);
-		cont_car++;
+	else{
+		if (c<9)
+		{
+			conf_pag(c-1,ESQ);
+			conf_pag(c-1,DIR);
+			conf_Y(0,ESQ);
+			conf_Y(0,DIR);
+			cont_car=0;
+		}
+		else
+		{
+			if (cont_car<8) lado =ESQ;
+				else lado =DIR;
+			c = c-32;
+			esc_glcd(fonte[c][0], DA, lado);
+			esc_glcd(fonte[c][1], DA, lado);
+			esc_glcd(fonte[c][2], DA, lado);
+			esc_glcd(fonte[c][3], DA, lado);
+			esc_glcd(fonte[c][4], DA, lado);
+			esc_glcd(0x00, DA, lado);
+			esc_glcd(0x00, DA, lado);
+			esc_glcd(0x00, DA, lado);
+			cont_car++;
+		}
+	}
+
+
+
+}
+//interrupção PCA
+void ISR_vart(void) __interrupt 4{
+	if(RI0 == 1){
+		flag = 1;
+		recieve = SBUF0;
+		RI0 = 0;		
 	}
 }
-
 /*********************************************************************
  * 
  * 	I2C
@@ -596,7 +612,7 @@ void setPWM(unsigned char dutyCycle)
 	switch (dutyCycle)
 	{
 		case 'o': // OFF
-			PCA0CPH0 = 255;
+			PCA0FISH0 = 255;
 			break;
 
 		case 'h': // Half speed
