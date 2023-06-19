@@ -1,6 +1,6 @@
 # Breeze8051: Sistema Adaptativo de Controle de Temperatura
 
-![Breeze8051](./assets/breeze8051.png)
+![Breeze8051](./breeze8051.png)
 
 ## Sobre o Projeto
 
