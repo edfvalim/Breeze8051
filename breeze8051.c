@@ -340,39 +340,35 @@ void putchar ( char c)
 {
 	__bit lado;
 	static unsigned char cont_car=0;
-	if(flag == 1){
-		//SBUF0 = c;
-		//while(TI0 ==0);
-		//TI0 = 0;
+
+    // putchar do PCA 
+	//SBUF0 = c;
+	//while(TI0 ==0);
+	//TI0 = 0;
+
+	if (c<9)
+	{
+		conf_pag(c-1,ESQ);
+		conf_pag(c-1,DIR);
+		conf_Y(0,ESQ);
+		conf_Y(0,DIR);
+		cont_car=0;
 	}
-	else{
-		if (c<9)
-		{
-			conf_pag(c-1,ESQ);
-			conf_pag(c-1,DIR);
-			conf_Y(0,ESQ);
-			conf_Y(0,DIR);
-			cont_car=0;
-		}
-		else
-		{
-			if (cont_car<8) lado =ESQ;
-				else lado =DIR;
-			c = c-32;
-			esc_glcd(fonte[c][0], DA, lado);
-			esc_glcd(fonte[c][1], DA, lado);
-			esc_glcd(fonte[c][2], DA, lado);
-			esc_glcd(fonte[c][3], DA, lado);
-			esc_glcd(fonte[c][4], DA, lado);
-			esc_glcd(0x00, DA, lado);
-			esc_glcd(0x00, DA, lado);
-			esc_glcd(0x00, DA, lado);
-			cont_car++;
-		}
+	else
+	{
+		if (cont_car<8) lado =ESQ;
+			else lado =DIR;
+		c = c-32;
+		esc_glcd(fonte[c][0], DA, lado);
+		esc_glcd(fonte[c][1], DA, lado);
+		esc_glcd(fonte[c][2], DA, lado);
+		esc_glcd(fonte[c][3], DA, lado);
+		esc_glcd(fonte[c][4], DA, lado);
+		esc_glcd(0x00, DA, lado);
+		esc_glcd(0x00, DA, lado);
+		esc_glcd(0x00, DA, lado);
+		cont_car++;
 	}
-
-
-
 }
 //interrupção PCA
 void ISR_vart(void) __interrupt 4{
