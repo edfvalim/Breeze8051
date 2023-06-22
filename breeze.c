@@ -139,7 +139,7 @@ int main(void)
 	limpa_glcd(DIR);
 	limpa_glcd(ESQ);
 
-    temp = ReadTemperature();
+    	temp = ReadTemperature();
 	delay_ms(500);
 	esc_eeprom(0xA0,0x07,44);
 	setPWM('o');
@@ -180,9 +180,9 @@ int main(void)
 				break;
 		}
 		printf_fast_f("\x02 TEMP: %3.1fC", temp);
-        printf_fast_f("\x03 IDEAL: %3.1fC", limiteAux);
+        	printf_fast_f("\x03 IDEAL: %3.1fC", limiteAux);
 		printf_fast_f("\x04 P3_1: IDEAL++");
-        printf_fast_f("\x05 P3_2: IDEAL--");
+        	printf_fast_f("\x05 P3_2: IDEAL--");
 		
 		printf_fast_f("\x07 FAN SPEED: %3.0f%%", speed);
 		//printf_fast_f("\x08 RPM: ???");
