@@ -125,7 +125,7 @@ int main(void)
 {
 	unsigned int cont;
 	int limite;
-	float temp, limiteAux, speed, histerese = 0.5; // Define a histerese de 1 graus
+	float temp, limiteAux, speed, histerese = 0.5;
 	unsigned char fanStatus = 'o';
 
 	Init_Device();
@@ -143,30 +143,26 @@ int main(void)
 	delay_ms(500);
 	esc_eeprom(0xA0,0x07,44);
 	setPWM('o');
-    while(1)
+	
+    	while(1)
 	{
+		WDTCN = 0xA5;
 		limite = le_eeprom(0xA0,0x07);
 		temp = ReadTemperature();
-        cont = le_teclas(P3);
+        	cont = le_teclas(P3);
 
 		if (cont != 21)
 		{
 			if (cont == 9)
-                limite++;
-				//setPWM('d');
-            else if(cont == 10)
+                		limite++;
+            		else if(cont == 10)
 				limite--;
-				//setPWM('i');
-            cont = esc_eeprom(0xA0,0x07,limite);
+            		cont = esc_eeprom(0xA0,0x07,limite);
 		}
-		limiteAux = limite/2.0;
-
-
-		fanStatus = controlFan(temp, limiteAux, fanStatus, histerese);
-
-		speed = (float)((255 - PCA0CPH0) / 255.0) * 100.0;
-
 		
+		limiteAux = limite/2.0;
+		fanStatus = controlFan(temp, limiteAux, fanStatus, histerese);
+		speed = (float)((255 - PCA0CPH0) / 255.0) * 100.0;
 
 		switch(fanStatus)
 		{
@@ -188,11 +184,8 @@ int main(void)
 		printf_fast_f("\x04 P3_1: IDEAL++");
         printf_fast_f("\x05 P3_2: IDEAL--");
 		
-
 		printf_fast_f("\x07 FAN SPEED: %3.0f%%", speed);
-		
-		printf_fast_f("\x08 RPM: ???");
-		
+		//printf_fast_f("\x08 RPM: ???");
 		//printf_fast_f("\x9");
 	}
 }
@@ -205,11 +198,11 @@ int main(void)
 
 void delay_ms(unsigned int t)  // Conta t milisegundos
 {
-
 	TMOD = TMOD | 0x01;
 	TMOD = TMOD & ~0x02;
 	for(;t>0; t--)
 	{
+		WDTCN = 0xA5;   // Reseta o watchdog timer
 		TR0 = 0;
 		TF0 = 0;
 		TH0 = 0x9e;
@@ -221,7 +214,6 @@ void delay_ms(unsigned int t)  // Conta t milisegundos
 }
 void delay_us(unsigned int t)
 {
-
 	TMOD = TMOD | 0x01;
 	TMOD = TMOD & ~0x02;
 	for(;t>0; t--)
@@ -311,7 +303,8 @@ unsigned char le_glcd( __bit cd, __bit cs)
 }
 void esc_glcd(unsigned char dado, __bit cd, __bit cs)
 {
-	while(le_glcd(CO,cs) & 0x80); // Ler estado para verificar se pode escrever
+	while(le_glcd(CO,cs) & 0x80)
+		WDTCN = 0xA5;   // Reseta o watchdog timer; // Ler estado para verificar se pode escrever
 	RW = 0;
 	CS1 = cs;
 	CS2 = !cs;

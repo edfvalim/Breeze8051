@@ -7,12 +7,6 @@
 
 // Peripheral specific initialization functions,
 // Called from the Init_Device() function
-void Reset_Sources_Init()
-{
-    WDTCN     = 0xDE;
-    WDTCN     = 0xAD;
-}
-
 void Timer_Init()
 {
     SFRPAGE   = TIMER01_PAGE;
@@ -118,7 +112,6 @@ void Oscillator_Init()
 // Call Init_Device() from your main program
 void Init_Device(void)
 {
-    Reset_Sources_Init();
     Timer_Init();
     PCA_Init();
     UART_Init();
