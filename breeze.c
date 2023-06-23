@@ -141,7 +141,6 @@ int main(void)
 
     	temp = ReadTemperature();
 	delay_ms(500);
-	esc_eeprom(0xA0,0x07,44);
 	setPWM('o');
 	
     	while(1)
