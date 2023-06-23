@@ -125,7 +125,7 @@ int main(void)
 {
 	unsigned int cont;
 	int limite;
-	float temp, limiteAux, speed, histerese = 0.5;
+	float temp, limiteAux, speed, histerese = 0.1;
 	unsigned char fanStatus = 'o';
 
 	Init_Device();
@@ -178,14 +178,13 @@ int main(void)
 				printf_fast_f("\x01 ERROR       ");
 				break;
 		}
-		printf_fast_f("\x02 TEMP: %3.1fC", temp);
+		printf_fast_f("\x02 TEMP: %3.1fC    ", temp);
         	printf_fast_f("\x03 IDEAL: %3.1fC", limiteAux);
 		printf_fast_f("\x04 P3_1: IDEAL++");
         	printf_fast_f("\x05 P3_2: IDEAL--");
 		
 		printf_fast_f("\x07 FAN SPEED: %3.0f%%", speed);
-		//printf_fast_f("\x08 RPM: ???");
-		//printf_fast_f("\x9");
+
 	}
 }
 
